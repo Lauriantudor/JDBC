@@ -1,6 +1,8 @@
 package org.example;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
+import org.example.dao.AnimalDao;
+import org.example.dao.AnimalDaoImpl;
 
 import java.sql.*;
 import java.util.logging.Level;
@@ -23,21 +25,23 @@ public class Main {
 
         try {
             Connection connection = dataSource.getConnection();
+            AnimalDao animalDao =new AnimalDaoImpl(connection);
             Statement statement = connection.createStatement();
-            statement.execute("create table if not exists animals " +
-                    "(id integer not null auto_increment, " +
-                    "name varchar(100), species varchar(100), primary key (id))");
 
-
-            statement.execute("insert into animals (name, species) values (\"Lucky\", \"Dog\")");
-            statement.execute("update animals set name=\"dog1\"  where id=1");
-
+            animalDao.createTable();
             statement.execute("create table if not exists food " +
                     "(id integer not null auto_increment, " +
                     "name varchar(100), description varchar(100)," +
                     "calories_per_100 varchar(100)," +
                     "expiration_date date," +
                     " primary key (id))");
+            LOGGER.info("Create the tables was successful");
+
+
+            statement.execute("insert into animals (name, species) values (\"Lucky\", \"Dog\")");
+            statement.execute("update animals set name=\"dog1\"  where id=1");
+
+
 
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "insert into food (name, description, calories_per_100, expiration_date) values (?, ?, ?, ?)");
@@ -73,9 +77,9 @@ public class Main {
                 System.out.print("expiră la " + rs2.getDate(5));
                 System.out.println();
             }
-            statement.execute("drop table animals");
+            animalDao.dropTable();
             statement.execute("drop table food");
-
+            LOGGER.info("Tables dropped successfully");
 
 
         }catch(SQLException sqlException){
