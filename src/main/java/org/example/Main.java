@@ -5,6 +5,7 @@ import org.example.dao.AnimalDao;
 import org.example.dao.AnimalDaoImpl;
 import org.example.dao.FoodDao;
 import org.example.dao.FoodDaoImpl;
+import org.example.model.Animal;
 
 import java.sql.*;
 import java.util.logging.Level;
@@ -37,7 +38,9 @@ public class Main {
             LOGGER.info("Create the tables was successful");
 
 
-            statement.execute("insert into animals (name, species) values (\"Lucky\", \"Dog\")");
+            animalDao.create(new Animal(null,"Lucky" ,"dog"));
+            animalDao.create(new Animal(null,"Rex" ,"dog"));
+            animalDao.create(new Animal(null,"Lulu" ,"dog"));
             statement.execute("update animals set name=\"dog1\"  where id=1");
 
 

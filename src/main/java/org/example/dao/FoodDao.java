@@ -7,4 +7,6 @@ public interface FoodDao {
 
 
     public void dropTable() throws SQLException;
+
+    public void create
 }

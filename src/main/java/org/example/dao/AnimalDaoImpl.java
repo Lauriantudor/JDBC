@@ -1,5 +1,7 @@
 package org.example.dao;
 
+import org.example.model.Animal;
+
 import java.sql.*;
 
 
@@ -25,5 +27,15 @@ public class AnimalDaoImpl implements AnimalDao{
     public void dropTable() throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute("drop table animals");
+    }
+
+    @Override
+    public void create(Animal animal) throws SQLException{
+      PreparedStatement preparedStatement =connection.prepareStatement(
+        "insert into animals (name, species) values (?,?)");
+
+      preparedStatement.setString(1, animal.getName());
+      preparedStatement.setString(2,animal.getSpecies());
+      preparedStatement.execute();
     }
 }
